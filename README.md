@@ -5,6 +5,8 @@ BETaskHelper helps you run NSTask interactively. Specifically you can:
 - receive output of the task line-by-line
 - send strings such as passwords to the task 
 
+We use BETaskHelper in our apps [Archiver](http://archiverapp.com) and [MainMenu](http://incrediblebee.com/mainmenu).
+
 ## Example
 
 This example uses the `openssl` command to encrypt a file.
