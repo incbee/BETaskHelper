@@ -61,10 +61,17 @@
 	NSPipe *inputPipe = [NSPipe pipe];
     [task setStandardInput:inputPipe];
 	
-	// Setup unbuffered I/O
-	// Note: we create an empty dictionary first in case the task's environment is
-	//       nil, which NSTask doesn't accept
+	// Setup unbuffered I/O. This isn't as trivial as it sounds because when
+	// we set an environment variable via setEnvironment: then the task no
+	// longer inherits our environment, including $PATH. Thus we first load
+	// our environment, then add the current task's environment in case the
+	// client has made any custom settings. Only then do we set unbuffered
+	// I/O.
+	//
+	// Note: we create an empty dictionary first in case the task's environment
+	//       is nil, which NSTask doesn't accept
 	NSMutableDictionary *environment = [NSMutableDictionary dictionary];
+	[environment addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
 	[environment addEntriesFromDictionary:[task environment]];
 	[environment setObject:@"YES" forKey:@"NSUnbufferedIO"];
 	[task setEnvironment:environment];
